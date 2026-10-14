@@ -1,0 +1,7 @@
+data
+test-results
+tests
+scripts
+docs
+design.mjs
+*.log
