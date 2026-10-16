@@ -1,0 +1,16 @@
+import {seedAccount} from './browser-account-fixture.mjs';
+import {createRequire} from 'node:module';import {once} from 'node:events';import {createApp} from '../server.mjs';import fs from 'node:fs';import os from 'node:os';import path from 'node:path';import assert from 'node:assert/strict';
+const require=createRequire(import.meta.url),{chromium}=require('C:/Users/HUAWEI/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
+const out=path.resolve('test-results/turtle-replacement');fs.mkdirSync(out,{recursive:true});const clock=Date.parse('2026-10-15T14:00:00+08:00');const server=createApp({dataDir:fs.mkdtempSync(path.join(os.tmpdir(),'turtle-art-')),now:()=>clock});server.listen(0,'127.0.0.1');await once(server,'listening');const base='http://127.0.0.1:'+server.address().port;
+const browser=await chromium.launch({channel:'msedge',headless:true});const page=await browser.newPage({viewport:{width:390,height:844}}),errors=[],checks=[];page.on('pageerror',e=>errors.push(e.message));
+try{
+ await seedAccount(page,base,'art-user');await page.goto(base);await page.getByPlaceholder('伙伴怎么称呼你？').fill('小龟');await page.getByRole('button',{name:'和龟龟一起出发',exact:true}).click();await page.locator('.nav').waitFor();
+ await page.evaluate(()=>fetch('/api/tasks',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({title:'和新龟龟认真读书',quadrant:'plan',startDate:'2026-10-15',startTime:'14:00',deadlineDate:'2026-10-15',deadlineTime:'23:59',duration:25,repeat:'once',weekdays:[],acknowledged:true})}));
+ await page.locator('[data-task]').waitFor();await page.screenshot({path:path.join(out,'home.png'),fullPage:true});
+ await page.locator('[data-task]').click();await page.waitForTimeout(700);await page.locator('.focus-art img').waitFor();assert(await page.locator('.focus-art img').evaluate(i=>i.complete&&i.naturalWidth>0));await page.screenshot({path:path.join(out,'focus.png'),fullPage:true});checks.push('首页与专注页显示新乌龟，布局不变');
+ for(const width of [320,390,1280]){await page.setViewportSize({width,height:844});assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));}checks.push('320/390/1280px 无横向溢出');
+ await page.goto(base+'/assets/turtle-focus.svg');const faces=await page.evaluate(()=>{const a=document.getAnimations();a.forEach(x=>{x.pause();x.currentTime=500});const smile=getComputedStyle(document.querySelector('#happy')).opacity;a.forEach(x=>x.currentTime=2000);return {smile,calm:getComputedStyle(document.querySelector('#calm')).opacity,count:a.length};});assert.equal(faces.smile,'1');assert.equal(faces.calm,'1');assert(faces.count>=5);checks.push('3.58 秒表情循环与迈步动画有效');
+ await page.emulateMedia({reducedMotion:'reduce'});assert.equal(await page.evaluate(()=>document.getAnimations().length),0);checks.push('减少动态效果时静止展示笑脸');
+ for(const file of ['turtle-brand.svg','turtle-hero.svg','turtle-focus.svg','turtle-reward.svg','icon-192.png','icon-512.png']){const res=await page.request.get(base+'/assets/'+file);assert(res.ok());assert((await res.body()).length>100);}checks.push('四个矢量素材和两个桌面图标可加载');
+ assert.deepEqual(errors,[]);fs.writeFileSync(path.join(out,'results.json'),JSON.stringify({checks,errors},null,2));console.log(JSON.stringify({checks,errors}));
+}finally{await browser.close();server.closeAllConnections();server.close();}

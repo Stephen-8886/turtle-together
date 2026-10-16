@@ -26,13 +26,28 @@ export function occurrence(task,day,memberId,records,now=Date.now()){
   const record=records[occurrenceKey(task,day,memberId)]||{};
   const {start,end}=times(task,occurrenceDay(task,day));
   const remaining=record.startedAt?Math.max(0,task.duration*60000-(now-record.startedAt)):task.duration*60000;
-  const status=record.status || (now>end?'expired':record.startedAt?'focusing':now<start?'scheduled':'pending');
+  const status=record.status || (now>end?'expired':record.startedAt?'focusing':'pending');
   return {...record,status,start,end,remaining};
 }
+// 本周轻食顿数：兼容旧数组（每天≤1）与新 dietMap（每天≤3）两种结构
+export const dietWeekCount=(log,wk,today)=>((log?.diet||[]).filter(d=>d>=wk&&d<=today).length)+Object.entries(log?.dietMap||{}).filter(([d])=>d>=wk&&d<=today).reduce((n,[,c])=>n+(Number(c)||0),0);
 export function settlement(room,member,day,now=Date.now()){
   const tasks=room.tasks.filter(t=>isDue(t,day,member));
   const completed=tasks.filter(t=>occurrence(t,day,member.id,room.records,now).status==='done');
   return {total:tasks.length,done:completed.length,minutes:completed.reduce((n,t)=>n+t.duration,0),ready:tasks.length>0&&tasks.length===completed.length,signature:tasks.map(t=>t.id).sort().join(',')};
+}
+export const weekStart = day => addDays(day,-((weekday(day)+6)%7));
+// 周抽奖券判定：周一为一周起点。本周内所有"已到期且有承诺"的日子必须全部完成（ready），
+// 且今天之后本周不得再有承诺日（还没到期的承诺意味着这一周尚未走完）。
+// 返回本周一日期作为发券凭证；整周无任何承诺、或存在未完成/逾期/例外 → 返回 null 不发券。
+export function weekTicket(room,member,today,now=Date.now()){
+  const monday=weekStart(today);let last=null;
+  for(let i=0;i<7;i++){
+    const day=addDays(monday,i);const s=settlement(room,member,day,now);
+    if(day<=today){ if(s.total>0&&!s.ready)return null; if(s.total>0)last=day; }
+    else if(s.total>0)return null;
+  }
+  return last?monday:null;
 }
 export function validateTask(input,now=Date.now()){
   const fail=message=>{throw new Error(message);};

@@ -1,20 +1,24 @@
-<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="230" height="191.667" viewBox="0 0 230 191.667" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g id="&#233;&#190;&#159;&#233;&#190;&#159; &#194;&#183; &#229;&#174;&#136;&#231;&#186;&#166;&#228;&#188;&#153;&#228;&#188;&#180;">
-<path id="Vector" opacity="0.08" d="M113.722 180.167C158.887 180.167 195.5 175.018 195.5 168.667C195.5 162.315 158.887 157.167 113.722 157.167C68.5576 157.167 31.9444 162.315 31.9444 168.667C31.9444 175.018 68.5576 180.167 113.722 180.167Z" fill="#263C30"/>
-<path id="Vector_2" d="M47.2778 134.167C28.537 129.907 22.5741 121.389 29.3889 108.611L53.6667 113.722" fill="#B5CB85"/>
-<path id="Vector_3" d="M75.3889 164.833C87.3857 164.833 97.1111 157.968 97.1111 149.5C97.1111 141.032 87.3857 134.167 75.3889 134.167C63.392 134.167 53.6667 141.032 53.6667 149.5C53.6667 157.968 63.392 164.833 75.3889 164.833Z" fill="#B5CB85"/>
-<path id="Vector_4" d="M141.833 166.111C153.83 166.111 163.556 159.246 163.556 150.778C163.556 142.309 153.83 135.444 141.833 135.444C129.836 135.444 120.111 142.309 120.111 150.778C120.111 159.246 129.836 166.111 141.833 166.111Z" fill="#B5CB85"/>
-<path id="Vector_5" d="M46 132.889C34.5 61.3333 83.0556 33.2222 127.778 53.6667C162.278 63.8889 175.056 99.6667 166.111 132.889H46Z" fill="#71934D" stroke="#467653" stroke-width="3"/>
-<path id="Vector_6" d="M92 61.3333L72.8333 92L90.7222 123.944L129.056 125.222L146.944 93.2778L127.778 62.6111L92 61.3333Z" fill="#87A45E" stroke="#557D43" stroke-width="3"/>
-<path id="Vector_7" d="M72.8333 92L44.7222 97.1111M90.7222 123.944L74.1111 144.389M129.056 125.222L140.556 144.389M146.944 93.2778L166.111 98.3889M102.222 56.2222L99.6667 39.6111" stroke="#557D43" stroke-width="3"/>
-<path id="Vector_8" d="M159.722 112.444C167.389 83.0556 203.167 84.3333 210.833 112.444C222.333 145.667 182.722 159.722 163.556 140.556L159.722 112.444Z" fill="#B5CB85" stroke="#467653" stroke-width="3"/>
-<path id="Vector_9" d="M189.111 118.833C191.228 118.833 192.944 116.545 192.944 113.722C192.944 110.899 191.228 108.611 189.111 108.611C186.994 108.611 185.278 110.899 185.278 113.722C185.278 116.545 186.994 118.833 189.111 118.833Z" fill="#263C30"/>
-<path id="Vector_10" d="M195.5 129.056C191.241 132.463 186.981 132.463 182.722 129.056" stroke="#467653" stroke-width="2.5" stroke-linecap="round"/>
-<path id="Vector_11" d="M200.611 127.778C204.14 127.778 207 126.062 207 123.944C207 121.827 204.14 120.111 200.611 120.111C197.083 120.111 194.222 121.827 194.222 123.944C194.222 126.062 197.083 127.778 200.611 127.778Z" fill="#E8ACA0"/>
-<path id="Vector_12" d="M98.3889 40.8889C85.6111 25.5556 87.3148 17.463 103.5 16.6111C117.13 15.7593 120.963 23 115 38.3333" fill="#A9C878"/>
-<g id="Vector_13">
-<path d="M106.056 39.6111L104.778 21.7222Z" fill="black"/>
-<path d="M106.056 39.6111L104.778 21.7222" stroke="#71934D" stroke-width="2"/>
-</g>
-</g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="230" height="191.667" viewBox="0 0 126 105" role="img" aria-label="笑眯眯的黄绿色小乌龟"><style>
+#turtle{transform-origin:63px 65px;animation:rock 3.58s ease-in-out infinite}
+#front-foot{transform-origin:60px 66px;animation:step 1.79s ease-in-out infinite}
+#back-foot{transform-origin:35px 65px;animation:step 1.79s -.895s ease-in-out infinite}
+#happy{animation:happy 3.58s steps(1,end) infinite}#calm{animation:calm 3.58s steps(1,end) infinite}
+@keyframes happy{0%,42%,100%{opacity:1}43%,82%{opacity:0}}
+@keyframes calm{0%,42%,100%{opacity:0}43%,82%{opacity:1}}
+@keyframes rock{0%,100%{transform:rotate(-2deg) translateY(0)}50%{transform:rotate(2deg) translateY(-1px)}}
+@keyframes step{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(7deg)}}
+@media(prefers-reduced-motion:reduce){#turtle,#front-foot,#back-foot,#happy,#calm{animation:none}#calm{opacity:0}}
+</style><g id="turtle" stroke-linecap="round" stroke-linejoin="round">
+<path d="M30 57Q23 55 19 45Q18 43 21 44L33 50Z" fill="#B9D64C"/>
+<path d="M32 59Q43 49 66 56L86 55L90 66Q73 76 51 71L35 68Z" fill="#B9D64C"/>
+<path id="back-foot" d="M29 59L28 69Q27 77 34 78Q41 79 42 72L42 65Z" fill="#B9D64C"/>
+<path id="far-foot" d="M77 61L79 73Q80 80 87 79Q94 78 93 71L91 61Z" fill="#B9D64C"/>
+<path d="M27 54C24 38 33 18 51 15C69 10 85 22 87 40C90 57 78 66 57 66C43 67 31 64 27 54Z" fill="#748940" stroke="#4B5E2B" stroke-width="2.6"/>
+<path d="M31 51C28 37 38 20 52 17C68 14 81 23 84 39C87 53 75 62 57 62C44 63 34 59 31 51Z" fill="#7C9147"/>
+<path d="M39 23L54 29L70 25L79 20M54 29L56 55M56 55L38 54L29 46M56 55L73 54L84 43M39 23L34 39L38 54M70 25L78 39L73 54" fill="none" stroke="#4B5E2B" stroke-width="3.5"/>
+<path d="M32 56Q52 68 75 57" fill="none" stroke="#4B5E2B" stroke-width="3.6"/>
+<path id="front-foot" d="M54 64L53 77Q53 85 61 85Q69 85 69 78L68 66Z" fill="#B9D64C"/>
+<path d="M69 58C66 50 68 37 77 30C85 23 98 27 103 36C108 45 104 57 95 61L91 69L72 68Z" fill="#B9D64C"/>
+<path d="M74 37Q80 29 89 29" fill="none" stroke="#C9E36A" stroke-width="2" opacity=".6"/>
+<g id="happy" fill="none" stroke="#141A0B" stroke-width="3.3"><path d="M77 42Q80 35 83 41M90 39Q93 32 96 38"/><path d="M83 48Q89 55 95 46"/></g><g id="calm" opacity="0" fill="#141A0B"><ellipse cx="80" cy="40" rx="3" ry="3.8"/><ellipse cx="93" cy="38" rx="3" ry="3.8"/><path d="M82 48H92" fill="none" stroke="#141A0B" stroke-width="3" stroke-linecap="round"/></g>
+</g></svg>

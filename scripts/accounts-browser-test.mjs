@@ -1,0 +1,27 @@
+import {createRequire} from 'node:module';
+import {once} from 'node:events';
+import {createApp} from '../server.mjs';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+const require=createRequire(import.meta.url),{chromium}=require(process.env.PLAYWRIGHT_PATH||'C:/Users/HUAWEI/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
+const out=path.resolve('test-results/accounts-clock');fs.mkdirSync(out,{recursive:true});let clock=Date.parse('2026-10-16T10:00:00+08:00');
+const server=createApp({dataDir:fs.mkdtempSync(path.join(os.tmpdir(),'turtle-auth-ui-')),now:()=>clock,clockInterval:100});server.listen(0,'127.0.0.1');await once(server,'listening');const base='http://127.0.0.1:'+server.address().port;
+const browser=await chromium.launch({channel:'msedge',headless:true}),checks=[],errors=[];
+async function page(){const context=await browser.newContext({viewport:{width:390,height:844}}),p=await context.newPage();p.on('pageerror',e=>errors.push(e.message));return p;}
+async function register(p,username){await p.goto(base);await p.getByRole('button',{name:'注册账号',exact:true}).click();await p.locator('[name=username]').fill(username);await p.locator('[name=password]').fill('long-secret-123');await p.getByPlaceholder('伙伴怎么称呼你？').fill(username);await p.getByRole('button',{name:'注册，和龟龟一起出发',exact:true}).click();await p.getByRole('heading',{name:'选一片共同的小森林'}).waitFor();}
+try{
+  const a=await page(),b=await page();await a.goto(base);await a.screenshot({path:path.join(out,'login.png'),fullPage:true});await register(a,'alice');await a.getByRole('button',{name:'和龟龟一起出发',exact:true}).click();await a.locator('.nav').waitFor();let state=await a.evaluate(()=>fetch('/api/state').then(r=>r.json()));const id=state.me,roomId=state.room.id;
+  await register(b,'bobby');await b.getByRole('button',{name:'加入小队',exact:true}).click();await b.locator('[name=invite]').fill(state.room.shortCode);await b.getByRole('button',{name:'加入伙伴的小森林',exact:true}).click();await b.locator('.nav').waitFor();checks.push('双账号注册、建队、邀请码加入');
+  await a.evaluate(()=>fetch('/api/tasks',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({title:'由服务器计时',quadrant:'plan',startDate:'2026-10-16',deadlineDate:'2026-10-16',deadlineTime:'23:59',duration:1,repeat:'once',acknowledged:true})}));await a.getByRole('button',{name:/由服务器计时，/}).click();await a.getByRole('button',{name:'开始专注',exact:true}).click();await a.waitForFunction(()=>document.querySelector('#timer')?.textContent==='01:00');
+  await a.evaluate(()=>{Date.now=()=>9999999999999;});await a.waitForTimeout(350);assert.equal(await a.locator('#timer').textContent(),'01:00');assert.equal(await a.locator('#focus-action').isDisabled(),true);checks.push('修改客户端 Date.now 不影响服务器倒计时或完成许可');
+  clock+=30000;await a.waitForFunction(()=>document.querySelector('#timer')?.textContent==='00:30');await a.reload();await a.getByRole('button',{name:'回到专注',exact:true}).click();await a.waitForFunction(()=>document.querySelector('#timer')?.textContent==='00:30');checks.push('刷新恢复后端计时');
+  const c=await page();await c.goto(base);await c.locator('[name=username]').fill('alice');await c.locator('[name=password]').fill('long-secret-123');await c.getByRole('button',{name:'登录，回到小森林',exact:true}).click();await c.locator('.nav').waitFor();assert.equal(await c.evaluate(()=>fetch('/api/state').then(r=>r.json()).then(s=>s.me)),id);checks.push('第二设备登录保留成员与任务');
+  clock+=30000;await a.waitForFunction(()=>document.querySelector('#focus-action')?.disabled===false);await a.getByRole('button',{name:'完成本次承诺',exact:true}).click();await a.getByRole('heading',{name:'今天的你，说到做到。',exact:true}).waitFor();checks.push('后端到时推送，完成并结算奖励');
+  await c.locator('.nav [data-view=nest]').click();await c.getByRole('button',{name:'账号与小队',exact:true}).click();await c.getByRole('button',{name:'创建小队',exact:true}).click();await c.locator('#dialog [name=roomName]').fill('隔离的小队');await c.locator('#dialog').getByRole('button',{name:'和龟龟一起出发',exact:true}).click();await c.locator('.nav').waitFor();assert.equal((await c.evaluate(()=>fetch('/api/state').then(r=>r.json()))).room.tasks.length,0);await c.locator('.nav [data-view=nest]').click();await c.getByRole('button',{name:'账号与小队',exact:true}).click();await c.locator(`#dialog [data-team-switch="${roomId}"]`).click();await c.getByRole('button',{name:/由服务器计时，/}).waitFor();checks.push('多小队切换、记录隔离及恢复');
+  await c.locator('.nav [data-view=nest]').click();await c.getByRole('button',{name:'账号与小队',exact:true}).click();await c.getByRole('button',{name:'退出账号',exact:true}).click();await c.getByRole('button',{name:'登录账号',exact:true}).waitFor();assert.equal(await c.evaluate(()=>JSON.parse(localStorage.getItem('turtle.snapshot'))),null);checks.push('退出清除缓存与身份');
+  await b.locator('.nav [data-view=fit]').click();await b.getByRole('heading',{name:/身材/}).first().waitFor();checks.push('身材页面兼容服务器日期');
+  for(const width of [320,390,1280]){await c.setViewportSize({width,height:844});assert.ok(await c.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));}checks.push('登录界面 320–1280px 无横向溢出');
+  assert.deepEqual(errors,[]);fs.writeFileSync(path.join(out,'results.json'),JSON.stringify({checks,errors},null,2));console.log(JSON.stringify({passed:checks.length,checks,errors},null,2));
+}finally{await browser.close();server.closeAllConnections();server.close();}

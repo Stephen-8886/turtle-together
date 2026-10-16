@@ -1,0 +1,3 @@
+const path=require('node:path');
+const sharp=require('C:/Users/HUAWEI/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/sharp');
+(async()=>{for(const size of [192,512]){const turtle=await sharp(path.join(__dirname,'../public/assets/turtle-reward.svg'),{density:300}).resize(Math.round(size*.7),Math.round(size*.7*150/180)).png().toBuffer();await sharp({create:{width:size,height:size,channels:4,background:'#FAF9F3'}}).composite([{input:turtle,gravity:'centre'}]).png().toFile(path.join(__dirname,`../public/assets/icon-${size}.png`));}})().catch(e=>{console.error(e);process.exit(1)});

@@ -146,6 +146,7 @@ export function createCommunityUI({getState,getView,now,api,go,render,nav,esc,ar
   window.addEventListener('pagehide',()=>{stopRecording();recorder?.stream.getTracks().forEach(t=>t.stop());});
   window.addEventListener('beforeunload',e=>{if(recorder||voices.size||sending.size){e.preventDefault();e.returnValue='';}});
   return {
+    reset(){stopRecording();recorder?.stream.getTracks().forEach(t=>t.stop());for(const voice of voices.values())if(voice.url)URL.revokeObjectURL(voice.url);chats.clear();voices.clear();sending.clear();topicId=null;filter={month:dayKey(now()).slice(0,7),member:'',category:''};},
     pages:{topics:topicList,chat,ledger},
     bind(){if(getView()==='chat'&&$('#message-form')){$('#message-form').addEventListener('submit',sendMessage);$('#message-text').addEventListener('input',e=>saveDraft(topicId,{text:e.target.value,clientId:uid()}));paintMessages({initial:true});updateVoice();loadMessages();}},
     receive(){if(getView()==='chat'){const topic=topics().find(t=>t.id===topicId);if(topic&&topic.count!==(chats.get(topicId)?.messages.at(-1)?.seq||0))loadMessages();updateVoice();return true;}return false;},
