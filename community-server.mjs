@@ -26,7 +26,7 @@ function exportHtml(room,topic,origin,now){
 }
 export function createCommunity({dataDir,now}){
   const mediaDir=path.join(dataDir,'media');fs.mkdirSync(mediaDir,{recursive:true});
-  return async function handle({req,res,url,room,member,body,send}){
+  return async function handle({req,res,url,room,member,body,send,authorize=()=>{}}){
     const route=url.pathname;
     if(!/^\/api\/(topics(?:\/|$)|audio\/|expenses(?:\/|$))/.test(route))return false;
     room.topics??=[];room.expenses??=[];
@@ -53,6 +53,7 @@ export function createCommunity({dataDir,now}){
     }
     if(req.method!=='POST')throw fail(404,'没有这个操作。');
     const input=await body(req,topicMatch?.[2]==='messages'?7*1024*1024+20000:20000);
+    authorize();
     if(route==='/api/topics'){
       const cid=clientId(input);if(room.topics.some(t=>t.owner===member.id&&t.clientId===cid))return {changed:false};
       const title=String(input.title||'').trim(),description=String(input.description||'').trim();if(!title||title.length>80||description.length>500)throw fail(400,'话题名称为 1–80 字，说明最多 500 字。');

@@ -1,6 +1,6 @@
 FROM node:24-alpine
 WORKDIR /app
-COPY package.json server.mjs community-server.mjs ./
+COPY package.json server.mjs community-server.mjs auth-server.mjs server-clock.mjs ./
 COPY public ./public
 RUN mkdir -p /app/data && chown -R node:node /app
 USER node
