@@ -1,0 +1,10 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+import {createClientServer} from './proxy.mjs';
+const root=path.dirname(fileURLToPath(import.meta.url));
+const backend=fs.readFileSync(process.argv[2],'utf8').trim();
+const server=createClientServer({publicDir:path.join(root,'public'),backend,allowLocal:true});
+server.on('error',e=>{console.error(e.message);process.exit(1);});
+server.listen(47831,'127.0.0.1');
+process.on('SIGTERM',()=>{server.closeAllConnections();server.close();});

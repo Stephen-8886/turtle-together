@@ -1,0 +1,9 @@
+plugins { id 'com.android.application' }
+android {
+    namespace 'cn.turtle.together'
+    compileSdk 35
+    defaultConfig { applicationId 'cn.turtle.together'; minSdk 26; targetSdk 35; versionCode 20000; versionName '2.0.0' }
+    buildFeatures { buildConfig true }
+    compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
+}
+dependencies { implementation 'org.nanohttpd:nanohttpd:2.3.1' }

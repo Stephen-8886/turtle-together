@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="103" height="85.833" viewBox="0 0 126 105" role="img" aria-label="笑眯眯的黄绿色小乌龟"><g id="turtle" stroke-linecap="round" stroke-linejoin="round">
+<path d="M30 57Q23 55 19 45Q18 43 21 44L33 50Z" fill="#B9D64C"/>
+<path d="M32 59Q43 49 66 56L86 55L90 66Q73 76 51 71L35 68Z" fill="#B9D64C"/>
+<path id="back-foot" d="M29 59L28 69Q27 77 34 78Q41 79 42 72L42 65Z" fill="#B9D64C"/>
+<path id="far-foot" d="M77 61L79 73Q80 80 87 79Q94 78 93 71L91 61Z" fill="#B9D64C"/>
+<path d="M27 54C24 38 33 18 51 15C69 10 85 22 87 40C90 57 78 66 57 66C43 67 31 64 27 54Z" fill="#748940" stroke="#4B5E2B" stroke-width="2.6"/>
+<path d="M31 51C28 37 38 20 52 17C68 14 81 23 84 39C87 53 75 62 57 62C44 63 34 59 31 51Z" fill="#7C9147"/>
+<path d="M39 23L54 29L70 25L79 20M54 29L56 55M56 55L38 54L29 46M56 55L73 54L84 43M39 23L34 39L38 54M70 25L78 39L73 54" fill="none" stroke="#4B5E2B" stroke-width="3.5"/>
+<path d="M32 56Q52 68 75 57" fill="none" stroke="#4B5E2B" stroke-width="3.6"/>
+<path id="front-foot" d="M54 64L53 77Q53 85 61 85Q69 85 69 78L68 66Z" fill="#B9D64C"/>
+<path d="M69 58C66 50 68 37 77 30C85 23 98 27 103 36C108 45 104 57 95 61L91 69L72 68Z" fill="#B9D64C"/>
+<path d="M74 37Q80 29 89 29" fill="none" stroke="#C9E36A" stroke-width="2" opacity=".6"/>
+<g id="happy" fill="none" stroke="#141A0B" stroke-width="3.3"><path d="M77 42Q80 35 83 41M90 39Q93 32 96 38"/><path d="M83 48Q89 55 95 46"/></g>
+</g></svg>
