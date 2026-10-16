@@ -1,0 +1,11 @@
+{
+  "pages": 15,
+  "checks": {
+    "first_message": true,
+    "message_106": true,
+    "long_message_end": true,
+    "nonempty_pages": true
+  },
+  "voice_links": 2,
+  "visual_review": "First, last and long-message pages rendered without clipping; full contact sheet reviewed separately."
+}
