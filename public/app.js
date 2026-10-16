@@ -241,4 +241,4 @@ setInterval(()=>{if(view==='focus'&&mode==='scenery'){photoIndex++;$('#focus-sta
 await loadPhotos();
 try{await api('state');if(state?.room){selectedMember=state.me;if(joinToken&&joinToken!==state.room.invite){showDialog('<h2>你已经在一个小队中</h2><p>可以到「我的小窝 → 账号与小队」加入这个邀请，现有记录会保留。</p><button class="btn" data-close>继续当前小队</button>');}connect();}}catch(err){if(err.status!==401){state=getLocal('turtle.snapshot',null);online=false;selectedMember=state?.me;if(state){identity={account:state.account,teams:state.teams||[]};selectedDay=state.timeline?.today||selectedDay;}}else putLocal('turtle.snapshot',null);}
 render();
-if('serviceWorker'in navigator)navigator.serviceWorker.register('/sw.js').catch(()=>{});
+
